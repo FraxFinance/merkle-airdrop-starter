@@ -49,8 +49,8 @@
     padding: 1rem;
     margin: 0px 1rem;
     border: 1px solid rgb(255, 255, 255);
-    color: rgb(0, 93, 194);
-    background-color: rgb(186, 206, 255);
+    color: black;
+    background-color: white;
   }
 
   // Actions menu
@@ -83,7 +83,7 @@
   z-index: 999;
 
   > a {
-    color: #9e9e9e;
+    color: black;
     font-size: 16px;
     display: flex;
     padding: 0.5rem;

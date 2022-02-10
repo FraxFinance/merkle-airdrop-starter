@@ -28,7 +28,7 @@
     font-weight: bold;
     line-height: 1.2;
     margin: 1rem;
-    color: #107cf1;
+    color: white;
   }
 
   > p {
@@ -45,9 +45,9 @@
     padding: 1rem;
     margin: 0px 1rem;
     font-size: 16px;
-    border: 1px solid rgb(255, 255, 255);
-    color: rgb(0, 93, 194);
-    background-color: rgb(186, 206, 255);
+    // border: 1px solid rgb(227, 227, 227);
+    color: black;
+    background-color: white;
 
     &:disabled {
       opacity: 0.5;
