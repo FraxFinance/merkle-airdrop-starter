@@ -6,11 +6,11 @@ type IConfig = {
 
 // Config from generator
 const config: IConfig = {
-  decimals: 18,
-  airdrop: {
-    "0x016C8780e5ccB32E5CAA342a926794cE64d9C364": 10,
-    "0x185a4dc360ce69bdccee33b3784b0282f7961aea": 100,
-  },
+  "decimals": 18,
+  "airdrop": {
+    "0x61935F4Ed8050170525dcD54D29847cF46bB38b3": 10,
+    "0x3CE4d19C155D977B04C8560Ed1Cc9C6F38Ee3d32": 100
+  }
 };
 
 // Export config
