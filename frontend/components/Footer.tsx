@@ -17,7 +17,7 @@ const footerLinks: { icon: string; url: string | undefined }[] = [
 export default function Footer() {
   return (
     <div className={styles.footer}>
-      {footerLinks.map(({ icon, url }, i) => {
+      {/* {footerLinks.map(({ icon, url }, i) => {
         // For each link in footer that is valid
         return url ? (
           // Render link with icon image
@@ -25,7 +25,7 @@ export default function Footer() {
             <Image src={icon} alt="Social link" width={30} height={30} />
           </a>
         ) : null;
-      })}
+      })} */}
     </div>
   );
 }
