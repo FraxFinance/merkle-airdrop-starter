@@ -17,17 +17,18 @@ pragma solidity >=0.6.11;
 // Travis Moore: https://github.com/FortisFortuna
 // Jason Huan: https://github.com/jasonhuan
 // Sam Kazemian: https://github.com/samkazemian
+// Jack Corddry: https://github.com/corddry
 
 // Reviewer(s) / Contributor(s)
 // Sam Sun: https://github.com/samczsun
 
 import "./FraxFinance/Common/Context.sol";
-import "../FraxFinance/ERC20/ERC20Custom.sol";
-import "../FraxFinance/ERC20/IERC20.sol";
-//import "../FraxFinance/Frax/Frax.sol";
-import "../FraxFinance/Staking/Owned.sol";
-import "../FraxFinance/Math/SafeMath.sol";
-import "../FraxFinance/Governance/AccessControl.sol";
+import "./FraxFinance/ERC20/ERC20Custom.sol";
+import "./FraxFinance/ERC20/IERC20.sol";
+//import "./FraxFinance/Frax/Frax.sol";
+import "./FraxFinance/Staking/Owned.sol";
+import "./FraxFinance/Math/SafeMath.sol";
+import "./FraxFinance/Governance/AccessControl.sol";
 
 contract FPIShares is ERC20Custom, AccessControl, Owned {
     using SafeMath for uint256;
