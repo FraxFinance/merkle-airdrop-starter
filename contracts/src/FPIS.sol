@@ -24,12 +24,12 @@ pragma solidity >=0.6.11;
 import "./FraxFinance/Common/Context.sol";
 import "../FraxFinance/ERC20/ERC20Custom.sol";
 import "../FraxFinance/ERC20/IERC20.sol";
-//import "../FraxFinance/Frax/Frax.sol";x
+//import "../FraxFinance/Frax/Frax.sol";
 import "../FraxFinance/Staking/Owned.sol";
 import "../FraxFinance/Math/SafeMath.sol";
 import "../FraxFinance/Governance/AccessControl.sol";
 
-contract FRAXShares is ERC20Custom, AccessControl, Owned {
+contract FPIShares is ERC20Custom, AccessControl, Owned {
     using SafeMath for uint256;
 
     /* ========== STATE VARIABLES ========== */
@@ -37,13 +37,13 @@ contract FRAXShares is ERC20Custom, AccessControl, Owned {
     string public symbol;
     string public name;
     uint8 public constant decimals = 18;
-    address public FRAXStablecoinAdd;
+    address public FPIAddress;
     
     uint256 public constant genesis_supply = 100000000e18; // 100M is printed upon genesis
 
     address public oracle_address;
     address public timelock_address; // Governance timelock address
-    FRAXStablecoin private FRAX;
+    FPIContract private FPI; //FPI Contract does not currently exist.
 
     bool public trackingVotes = true; // Tracking votes (only change if need to disable votes)
 
@@ -62,7 +62,7 @@ contract FRAXShares is ERC20Custom, AccessControl, Owned {
     /* ========== MODIFIERS ========== */
 
     modifier onlyPools() {
-       require(FRAX.frax_pools(msg.sender) == true, "Only frax pools can mint new FRAX");
+       require(FPI.fpi_pools(msg.sender) == true, "Only fpi pools can mint new FPI");
         _;
     } 
     
@@ -105,19 +105,19 @@ contract FRAXShares is ERC20Custom, AccessControl, Owned {
         timelock_address = new_timelock;
     }
     
-    function setFRAXAddress(address frax_contract_address) external onlyByOwnGov {
-        require(frax_contract_address != address(0), "Zero address detected");
+    function setFPIAddress(address fpi_contract_address) external onlyByOwnGov {
+        require(fpi_contract_address != address(0), "Zero address detected");
 
-        FRAX = FRAXStablecoin(frax_contract_address);
+        FPI = FPIContract(fpi_contract_address);
 
-        emit FRAXAddressSet(frax_contract_address);
+        emit FPIAddressSet(fpi_contract_address);
     }
     
     function mint(address to, uint256 amount) public onlyPools {
         _mint(to, amount);
     }
     
-    // This function is what other frax pools will call to mint new FXS (similar to the FRAX mint) 
+    // This function is what other FPI pools will call to mint new FPIS (similar to the FRAX mint) 
     function pool_mint(address m_address, uint256 m_amount) external onlyPools {        
         if(trackingVotes){
             uint32 srcRepNum = numCheckpoints[address(this)];
@@ -128,10 +128,10 @@ contract FRAXShares is ERC20Custom, AccessControl, Owned {
         }
 
         super._mint(m_address, m_amount);
-        emit FXSMinted(address(this), m_address, m_amount);
+        emit FPISMinted(address(this), m_address, m_amount);
     }
 
-    // This function is what other frax pools will call to burn FXS 
+    // This function is what other FPI pools will call to burn FPIS 
     function pool_burn_from(address b_address, uint256 b_amount) external onlyPools {
         if(trackingVotes){
             trackVotes(b_address, address(this), uint96(b_amount));
@@ -142,7 +142,7 @@ contract FRAXShares is ERC20Custom, AccessControl, Owned {
         }
 
         super._burnFrom(b_address, b_amount);
-        emit FXSBurned(b_address, address(this), b_amount);
+        emit FPIBurned(b_address, address(this), b_amount);
     }
 
     function toggleVotes() external onlyByOwnGov {
@@ -193,7 +193,7 @@ contract FRAXShares is ERC20Custom, AccessControl, Owned {
      * @return The number of votes the account had as of the given block
      */
     function getPriorVotes(address account, uint blockNumber) public view returns (uint96) {
-        require(blockNumber < block.number, "FXS::getPriorVotes: not yet determined");
+        require(blockNumber < block.number, "FPIS::getPriorVotes: not yet determined");
 
         uint32 nCheckpoints = numCheckpoints[account];
         if (nCheckpoints == 0) {
@@ -235,14 +235,14 @@ contract FRAXShares is ERC20Custom, AccessControl, Owned {
             if (srcRep != address(0)) {
                 uint32 srcRepNum = numCheckpoints[srcRep];
                 uint96 srcRepOld = srcRepNum > 0 ? checkpoints[srcRep][srcRepNum - 1].votes : 0;
-                uint96 srcRepNew = sub96(srcRepOld, amount, "FXS::_moveVotes: vote amount underflows");
+                uint96 srcRepNew = sub96(srcRepOld, amount, "FPIS::_moveVotes: vote amount underflows");
                 _writeCheckpoint(srcRep, srcRepNum, srcRepOld, srcRepNew);
             }
 
             if (dstRep != address(0)) {
                 uint32 dstRepNum = numCheckpoints[dstRep];
                 uint96 dstRepOld = dstRepNum > 0 ? checkpoints[dstRep][dstRepNum - 1].votes : 0;
-                uint96 dstRepNew = add96(dstRepOld, amount, "FXS::_moveVotes: vote amount overflows");
+                uint96 dstRepNew = add96(dstRepOld, amount, "FPIS::_moveVotes: vote amount overflows");
                 _writeCheckpoint(dstRep, dstRepNum, dstRepOld, dstRepNew);
             }
         }
@@ -288,10 +288,10 @@ contract FRAXShares is ERC20Custom, AccessControl, Owned {
     event VoterVotesChanged(address indexed voter, uint previousBalance, uint newBalance);
 
     // Track FXS burned
-    event FXSBurned(address indexed from, address indexed to, uint256 amount);
+    event FPISBurned(address indexed from, address indexed to, uint256 amount);
 
     // Track FXS minted
-    event FXSMinted(address indexed from, address indexed to, uint256 amount);
+    event FPISMinted(address indexed from, address indexed to, uint256 amount);
 
-    event FRAXAddressSet(address addr);
+    event FPIAddressSet(address addr);
 }
