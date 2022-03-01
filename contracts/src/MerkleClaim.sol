@@ -4,10 +4,7 @@ pragma solidity >=0.8.0;
 /// ============ Imports ============
 
 import { MerkleProof } from "@openzeppelin/utils/cryptography/MerkleProof.sol"; // OZ: MerkleProof
-
-// https://eips.ethereum.org/EIPS/eip-20
-// SPDX-License-Identifier: MIT
-pragma solidity >=0.5.0 <0.8.0;
+//import { MerkleProof } from "./MerkleProof.sol"; // OZ: MerkleProof
 
 interface IERC20 {
   function approve(address spender, uint256 amount) external returns (bool);
